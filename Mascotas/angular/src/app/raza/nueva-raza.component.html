@@ -1,0 +1,21 @@
+<h1>{{raza._id ? "Editar Raza" : 'Nueva Raza' }}</h1>
+
+<form #f="ngForm" novalidate>
+    <div class="form-group">
+        <label>Nombre:</label>
+
+        <input type="text" class="form-control" name="name" [class.errorBorder]="errors['name']" [(ngModel)]="raza.name" required>
+
+        <div *ngIf="f.controls.name?.invalid && f.controls.name?.touched" class="error">
+            Dato invalido
+        </div>
+
+        <div *ngIf="errors.name" class="error">
+            {{errors.name}}
+        </div>
+    </div>
+
+    <button class="btn btn-default" [routerLink]="['/razas']">Cancelar</button>
+    <button class="btn btn-warning" *ngIf="raza._id" (click)="onDelete()">Eliminar</button>
+    <button class="btn btn-success" (click)="submitForm()" [disabled]="f.invalid">Guardar</button>
+</form>

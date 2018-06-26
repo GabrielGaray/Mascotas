@@ -1,0 +1,28 @@
+<div class="container">
+    <table cellspacing='0'>
+        <thead>
+            <tr>
+                <th colspan=3>
+                    <div [style.font-size.em]='2'>Razas</div>
+                </th>
+            </tr>
+            <tr>
+                <th>Numero</th>
+                <th>Nombre</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr *ngFor="let raza of razas">
+                <td>{{getNumber()}}</td>
+                <td>{{raza.name}}</td>
+                <td class="text">
+                    <img src="/assets/edit.png" name="editar" [routerLink]="['/nuevaRaza/' + raza._id ]" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-success" [routerLink]="['/nuevaRaza']">Nueva</button>
+    <button class="btn btn-default" [routerLink]="['/']">Volver</button>
+</div>
