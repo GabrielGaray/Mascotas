@@ -4,6 +4,7 @@ import * as esLocale from "date-fns/locale/es";
 import * as errorHandler from "../tools/error-handler";
 import { IErrorController } from "../tools/error-handler";
 import { Raza, RazaService } from "./raza.service";
+import { MascotaService, Mascota } from "../mascota/mascota.service"; //
 
 
 @Component({
@@ -13,6 +14,7 @@ import { Raza, RazaService } from "./raza.service";
 })
 export class NuevaRazaComponent implements OnInit, IErrorController {
     raza: Raza;
+    mascota: Mascota; //
     arLocale = esLocale;
     formSubmitted: boolean;
 
@@ -22,8 +24,9 @@ export class NuevaRazaComponent implements OnInit, IErrorController {
     constructor(
         private razasService: RazaService,
         private route: ActivatedRoute,
-        private router: Router
-        ) {
+        private router: Router,
+        private mascotaService: MascotaService
+              ) {
         this.raza = {
             _id: undefined,
             name: ""
@@ -56,9 +59,18 @@ export class NuevaRazaComponent implements OnInit, IErrorController {
 
     onDelete() {
         errorHandler.cleanRestValidations(this);
-        this.razasService
-        .eliminarRaza(this.raza._id)
-        .then(any => this.router.navigate(["/razas"]))
-        .catch(error => errorHandler.procesarValidacionesRest(this, error));
+        this.mascotaService
+        .buscarMascotas()
+        .then(mascotas => {
+          if (mascotas.find(mascota => mascota.raza === this.raza._id))
+            return alert("no se puede borrar pq esta siendo usada");
+          else {
+            this.razasService
+            .eliminarRaza(this.raza._id)
+            .then(any => this.router.navigate(["/razas"]))
+            .catch(error => errorHandler.procesarValidacionesRest(this, error));
+          }
+          })
+        .catch(error => (this.errorMessage = <any>error));
     }
 }
